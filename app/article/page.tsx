@@ -3,7 +3,7 @@ import { FC } from "react"
 import { articles } from "../../data/articles"
 
 export const metadata = {
-  title: "解説記事一覧 | 音節英単語",
+  title: "解説記事一覧 | syllabler シルブラ！",
   description: "音節・アクセント・発音記号・英単語の覚え方を解説する記事一覧。",
 }
 

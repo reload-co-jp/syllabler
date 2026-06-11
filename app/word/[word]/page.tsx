@@ -1,20 +1,37 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { FC } from "react"
 import { words } from "../../../data/words"
+import { BASE_URL, SITE_NAME } from "../../../lib/constants"
 import { WordLevel } from "../../../types"
 
 export function generateStaticParams() {
   return words.map((w) => ({ word: w.word }))
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ word: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ word: string }>
+}): Promise<Metadata> {
   const { word: w } = await params
   const word = words.find((wd) => wd.word === w)
   if (!word) return {}
+  const title = `${word.word} の音節・発音・アクセント`
+  const description = `${word.word}（${word.meaningJa}）の音節は「${word.syllables.join("・")}」で${word.syllableCount}音節。アクセントは${word.syllables[word.stressIndex].toUpperCase()}。発音記号${word.phonetic}。`
+  const url = `${BASE_URL}/word/${word.word}`
   return {
-    title: `${word.word} 音節 | 音節英単語`,
-    description: `${word.word}（${word.meaningJa}）の音節は ${word.syllables.join("・")}。${word.syllableCount}音節。`,
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${title} | ${SITE_NAME}`,
+      description,
+      url,
+      type: "article",
+    },
+    twitter: { card: "summary", title: `${title} | ${SITE_NAME}`, description },
   }
 }
 
@@ -38,6 +55,23 @@ const Page = async ({ params }: { params: Promise<{ word: string }> }) => {
 
   return (
     <div style={{ maxWidth: "640px", margin: "0 auto" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "DefinedTerm",
+            name: word.word,
+            description: `${word.word}（${word.meaningJa}）。音節: ${word.syllables.join("・")}（${word.syllableCount}音節）。発音記号: ${word.phonetic}。`,
+            url: `${BASE_URL}/word/${word.word}`,
+            inDefinedTermSet: {
+              "@type": "DefinedTermSet",
+              name: `${SITE_NAME} 英単語音節辞典`,
+              url: BASE_URL,
+            },
+          }),
+        }}
+      />
       {/* Breadcrumb */}
       <div style={{ marginBottom: ".875rem" }}>
         <Link href="/" style={{ color: "#3ea8ff", fontSize: ".8125rem", textDecoration: "none" }}>

@@ -1,18 +1,37 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { articles } from "../../../data/articles"
+import { BASE_URL, SITE_NAME } from "../../../lib/constants"
 
 export function generateStaticParams() {
   return articles.map((a) => ({ slug: a.slug }))
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
   const { slug } = await params
   const article = articles.find((a) => a.slug === slug)
   if (!article) return {}
+  const url = `${BASE_URL}/article/${slug}`
   return {
-    title: `${article.title} | 音節英単語`,
+    title: article.title,
     description: article.description,
+    alternates: { canonical: url },
+    openGraph: {
+      title: `${article.title} | ${SITE_NAME}`,
+      description: article.description,
+      url,
+      type: "article",
+    },
+    twitter: {
+      card: "summary",
+      title: `${article.title} | ${SITE_NAME}`,
+      description: article.description,
+    },
   }
 }
 
@@ -23,6 +42,23 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
   return (
     <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            headline: article.title,
+            description: article.description,
+            url: `${BASE_URL}/article/${article.slug}`,
+            publisher: {
+              "@type": "Organization",
+              name: SITE_NAME,
+              url: BASE_URL,
+            },
+          }),
+        }}
+      />
       {/* Breadcrumb */}
       <div style={{ marginBottom: ".875rem" }}>
         <Link href="/" style={{ color: "#3ea8ff", fontSize: ".8125rem", textDecoration: "none" }}>

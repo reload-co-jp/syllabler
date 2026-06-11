@@ -1,8 +1,22 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import { FC } from "react"
 import { articles } from "../data/articles"
 import { words, wordsByLevel } from "../data/words"
+import { BASE_URL, SITE_DESCRIPTION, SITE_NAME } from "../lib/constants"
 import { WordLevel } from "../types"
+
+export const metadata: Metadata = {
+  title: `${SITE_NAME} | 音節で覚える英単語学習`,
+  description: SITE_DESCRIPTION,
+  alternates: { canonical: BASE_URL },
+  openGraph: {
+    title: `${SITE_NAME} | 音節で覚える英単語学習`,
+    description: SITE_DESCRIPTION,
+    url: BASE_URL,
+    type: "website",
+  },
+}
 
 const levelLabel: Record<WordLevel, string> = {
   junior: "中学",
@@ -17,6 +31,18 @@ const Page: FC = () => {
 
   return (
     <div style={{ maxWidth: "800px", margin: "0 auto" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: SITE_NAME,
+            description: SITE_DESCRIPTION,
+            url: BASE_URL,
+          }),
+        }}
+      />
       {/* Hero */}
       <section
         style={{

@@ -1,10 +1,29 @@
+import type { Metadata } from "next"
 import Link from "next/link"
+import { BASE_URL, SITE_DESCRIPTION, SITE_NAME } from "../lib/constants"
 import "./reset.css"
 
-export const metadata = {
-  title: "音節英単語 | 音節で覚える英単語学習",
-  description:
-    "英単語を音節（Syllable）単位で学習するクイズ・解説サイト。発音・アクセント・記憶力アップ。",
+export const metadata: Metadata = {
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: `${SITE_NAME} | 音節で覚える英単語学習`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} | 音節で覚える英単語学習`,
+    description: SITE_DESCRIPTION,
+    locale: "ja_JP",
+  },
+  twitter: {
+    card: "summary",
+    title: `${SITE_NAME} | 音節で覚える英単語学習`,
+    description: SITE_DESCRIPTION,
+  },
+  alternates: { canonical: BASE_URL },
+  robots: { index: true, follow: true },
 }
 
 const navLinks = [
@@ -41,7 +60,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
               letterSpacing: "0.02em",
             }}
           >
-            音節英単語
+            syllabler シルブラ！
           </Link>
           <nav style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
             {navLinks.map((link) => (
@@ -80,7 +99,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             color: "#999",
           }}
         >
-          <p>© 音節英単語</p>
+          <p>© syllabler シルブラ！</p>
         </footer>
       </body>
     </html>
