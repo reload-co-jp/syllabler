@@ -3,6 +3,26 @@
 import Link from "next/link"
 import { FC, useState } from "react"
 import { words } from "../../../data/words"
+import { BASE_URL, SITE_NAME } from "../../../lib/constants"
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  name: "アクセントクイズ",
+  description: "英単語のどの音節にアクセントがあるかを当てるクイズ。正しい音節をタップしよう。",
+  url: `${BASE_URL}/quiz/stress`,
+  learningResourceType: "quiz",
+  educationalUse: "practice",
+  inLanguage: "ja",
+  publisher: { "@type": "Organization", name: SITE_NAME, url: BASE_URL },
+  breadcrumb: {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "ホーム", item: BASE_URL },
+      { "@type": "ListItem", position: 2, name: "アクセントクイズ", item: `${BASE_URL}/quiz/stress` },
+    ],
+  },
+}
 
 const Page: FC = () => {
   const [index, setIndex] = useState(0)
@@ -19,6 +39,10 @@ const Page: FC = () => {
 
   return (
     <div style={{ maxWidth: "520px", margin: "0 auto" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div style={{ marginBottom: ".875rem" }}>
         <Link href="/" style={{ color: "#3ea8ff", fontSize: ".8125rem", textDecoration: "none" }}>
           ホーム

@@ -45,18 +45,25 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Article",
-            headline: article.title,
-            description: article.description,
-            url: `${BASE_URL}/article/${article.slug}`,
-            publisher: {
-              "@type": "Organization",
-              name: SITE_NAME,
-              url: BASE_URL,
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "Article",
+              headline: article.title,
+              description: article.description,
+              url: `${BASE_URL}/article/${article.slug}`,
+              publisher: { "@type": "Organization", name: SITE_NAME, url: BASE_URL },
             },
-          }),
+            {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "ホーム", item: BASE_URL },
+                { "@type": "ListItem", position: 2, name: "解説", item: `${BASE_URL}/article` },
+                { "@type": "ListItem", position: 3, name: article.title, item: `${BASE_URL}/article/${article.slug}` },
+              ],
+            },
+          ]),
         }}
       />
       {/* Breadcrumb */}

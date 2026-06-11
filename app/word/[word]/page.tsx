@@ -58,18 +58,28 @@ const Page = async ({ params }: { params: Promise<{ word: string }> }) => {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "DefinedTerm",
-            name: word.word,
-            description: `${word.word}（${word.meaningJa}）。音節: ${word.syllables.join("・")}（${word.syllableCount}音節）。発音記号: ${word.phonetic}。`,
-            url: `${BASE_URL}/word/${word.word}`,
-            inDefinedTermSet: {
-              "@type": "DefinedTermSet",
-              name: `${SITE_NAME} 英単語音節辞典`,
-              url: BASE_URL,
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "DefinedTerm",
+              name: word.word,
+              description: `${word.word}（${word.meaningJa}）。音節: ${word.syllables.join("・")}（${word.syllableCount}音節）。発音記号: ${word.phonetic}。`,
+              url: `${BASE_URL}/word/${word.word}`,
+              inDefinedTermSet: {
+                "@type": "DefinedTermSet",
+                name: `${SITE_NAME} 英単語音節辞典`,
+                url: BASE_URL,
+              },
             },
-          }),
+            {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "ホーム", item: BASE_URL },
+                { "@type": "ListItem", position: 2, name: word.word, item: `${BASE_URL}/word/${word.word}` },
+              ],
+            },
+          ]),
         }}
       />
       {/* Breadcrumb */}
