@@ -19,7 +19,6 @@ const Page: FC = () => {
 
   return (
     <div style={{ maxWidth: "520px", margin: "0 auto" }}>
-      {/* Breadcrumb */}
       <div style={{ marginBottom: ".875rem" }}>
         <Link href="/" style={{ color: "#3ea8ff", fontSize: ".8125rem", textDecoration: "none" }}>
           ホーム
@@ -28,14 +27,7 @@ const Page: FC = () => {
         <span style={{ color: "#999", fontSize: ".8125rem" }}>アクセントクイズ</span>
       </div>
 
-      <h1
-        style={{
-          color: "#1a1a2e",
-          fontSize: "1.25rem",
-          fontWeight: "bold",
-          marginBottom: "1.25rem",
-        }}
-      >
+      <h1 style={{ color: "#1a1a2e", fontSize: "1.25rem", fontWeight: "bold", marginBottom: "1.25rem" }}>
         アクセントクイズ
       </h1>
 
@@ -48,81 +40,75 @@ const Page: FC = () => {
           boxShadow: "0 1px 4px rgba(0,0,0,.06)",
         }}
       >
-        {/* Question */}
-        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <div style={{ color: "#999", fontSize: ".8125rem", marginBottom: ".75rem" }}>
-            アクセント（強く読む音節）はどれ？
-          </div>
-          <div
-            style={{
-              fontSize: "2.25rem",
-              fontWeight: "bold",
-              color: "#1a1a2e",
-              letterSpacing: "0.04em",
-              marginBottom: ".25rem",
-            }}
-          >
-            {word.word}
-          </div>
-          <div style={{ color: "#bbb", fontFamily: "monospace", fontSize: ".875rem" }}>
-            {word.phonetic}
-          </div>
+        {/* Instruction */}
+        <div style={{ color: "#999", fontSize: ".8125rem", textAlign: "center", marginBottom: "2rem" }}>
+          強く読む音節をタップ
         </div>
 
-        {/* Syllable Buttons */}
+        {/* Syllable word display */}
         <div
           style={{
             display: "flex",
             justifyContent: "center",
-            gap: ".75rem",
+            alignItems: "center",
+            gap: "0",
+            marginBottom: answered ? "2rem" : "0",
             flexWrap: "wrap",
-            marginBottom: answered ? "1.5rem" : "0",
           }}
         >
           {word.syllables.map((s, i) => {
             const isCorrect = i === word.stressIndex
             const isSelected = i === selected
 
-            let bg = "#fafafa"
-            let border = "#e0e0e0"
-            let color = "#444"
+            let color = "#1a1a2e"
+            let borderBottom = "2px solid transparent"
+            let bg = "transparent"
 
-            if (answered) {
+            if (!answered) {
+              borderBottom = "2px solid #e0e0e0"
+            } else {
               if (isCorrect) {
-                bg = "#e8f5e9"
-                border = "#4caf50"
-                color = "#2e7d32"
+                color = "#1565c0"
+                borderBottom = "2px solid #3ea8ff"
+                bg = "#e3f2fd"
               } else if (isSelected) {
-                bg = "#ffebee"
-                border = "#f44336"
                 color = "#c62828"
+                borderBottom = "2px solid #f44336"
+                bg = "#ffebee"
               } else {
-                color = "#ccc"
-                border = "#f0f0f0"
+                color = "#bbb"
+                borderBottom = "2px solid transparent"
               }
             }
 
             return (
-              <button
-                key={i}
-                onClick={() => !answered && setSelected(i)}
-                disabled={answered}
-                style={{
-                  padding: ".875rem 1.5rem",
-                  backgroundColor: bg,
-                  border: `2px solid ${border}`,
-                  borderRadius: "8px",
-                  color,
-                  fontSize: "1.25rem",
-                  fontWeight: "bold",
-                  cursor: answered ? "default" : "pointer",
-                  minWidth: "80px",
-                  boxShadow: answered ? "none" : "0 1px 2px rgba(0,0,0,.04)",
-                  transition: "all .12s",
-                }}
-              >
-                {s}
-              </button>
+              <span key={i} style={{ display: "inline-flex", alignItems: "center" }}>
+                {i > 0 && (
+                  <span style={{ color: "#ccc", fontSize: "1.5rem", userSelect: "none", margin: "0 1px" }}>
+                    ·
+                  </span>
+                )}
+                <button
+                  onClick={() => !answered && setSelected(i)}
+                  disabled={answered}
+                  style={{
+                    fontSize: "2.25rem",
+                    fontWeight: "700",
+                    letterSpacing: "0.02em",
+                    color,
+                    background: bg,
+                    border: "none",
+                    borderBottom,
+                    borderRadius: bg !== "transparent" ? "4px" : "0",
+                    padding: "0.1em 0.15em",
+                    cursor: answered ? "default" : "pointer",
+                    transition: "all .12s",
+                    lineHeight: 1.2,
+                  }}
+                >
+                  {answered && isCorrect ? s.toUpperCase() : s}
+                </button>
+              </span>
             )
           })}
         </div>
@@ -143,37 +129,15 @@ const Page: FC = () => {
               style={{
                 fontSize: "1rem",
                 fontWeight: "bold",
-                marginBottom: ".875rem",
-                color: correct ? "#2e7d32" : "#c62828",
+                marginBottom: ".5rem",
+                color: correct ? "#1565c0" : "#c62828",
               }}
             >
               {correct
                 ? "✓ 正解！"
                 : `✗ 不正解。正解は「${word.syllables[word.stressIndex].toUpperCase()}」`}
             </div>
-            <div
-              style={{
-                fontSize: "1.75rem",
-                fontWeight: "bold",
-                color: "#1a1a2e",
-                marginBottom: ".625rem",
-              }}
-            >
-              {word.syllables.map((s, i) => (
-                <span key={i}>
-                  {i > 0 && <span style={{ color: "#cce0f0" }}>・</span>}
-                  <span
-                    style={{
-                      color: i === word.stressIndex ? "#3ea8ff" : "#b0bcc8",
-                      textTransform: i === word.stressIndex ? "uppercase" : "none",
-                    }}
-                  >
-                    {s}
-                  </span>
-                </span>
-              ))}
-            </div>
-            <div style={{ color: "#666", fontSize: ".8125rem", lineHeight: "1.6" }}>
+            <div style={{ color: "#666", fontSize: ".8125rem", lineHeight: "1.7" }}>
               {word.explanation}
             </div>
           </div>

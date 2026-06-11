@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 }
 
 const navLinks = [
-  { href: "/quiz/syllable-count", label: "音節数クイズ" },
+  { href: "/quiz/syllable-count", label: "音節区切りクイズ" },
   { href: "/quiz/stress", label: "アクセントクイズ" },
   { href: "/article", label: "解説" },
 ]

@@ -81,8 +81,8 @@ const Page: FC = () => {
         >
           <QuizCard
             href="/quiz/syllable-count"
-            title="音節数クイズ"
-            description="この単語は何音節？4択で答えよう。"
+            title="音節区切りクイズ"
+            description="単語の音節の区切り位置はどこ？タップして答えよう。"
           />
           <QuizCard
             href="/quiz/stress"
