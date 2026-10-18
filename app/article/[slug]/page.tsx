@@ -1,8 +1,15 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
+import {
+  card,
+  primaryButton,
+  secondaryButton,
+} from "../../../components/elements/syllable"
 import { articles } from "../../../data/articles"
 import { BASE_URL, SITE_NAME } from "../../../lib/constants"
+
+export const dynamicParams = false
 
 export function generateStaticParams() {
   return articles.map((a) => ({ slug: a.slug }))
@@ -16,7 +23,7 @@ export async function generateMetadata({
   const { slug } = await params
   const article = articles.find((a) => a.slug === slug)
   if (!article) return {}
-  const url = `${BASE_URL}/article/${slug}`
+  const url = `${BASE_URL}/article/${slug}/`
   return {
     title: article.title,
     description: article.description,
@@ -51,16 +58,35 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
               "@type": "Article",
               headline: article.title,
               description: article.description,
-              url: `${BASE_URL}/article/${article.slug}`,
-              publisher: { "@type": "Organization", name: SITE_NAME, url: BASE_URL },
+              url: `${BASE_URL}/article/${article.slug}/`,
+              publisher: {
+                "@type": "Organization",
+                name: SITE_NAME,
+                url: BASE_URL,
+              },
             },
             {
               "@context": "https://schema.org",
               "@type": "BreadcrumbList",
               itemListElement: [
-                { "@type": "ListItem", position: 1, name: "ホーム", item: BASE_URL },
-                { "@type": "ListItem", position: 2, name: "解説", item: `${BASE_URL}/article` },
-                { "@type": "ListItem", position: 3, name: article.title, item: `${BASE_URL}/article/${article.slug}` },
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "ホーム",
+                  item: `${BASE_URL}/`,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "解説",
+                  item: `${BASE_URL}/article/`,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: article.title,
+                  item: `${BASE_URL}/article/${article.slug}/`,
+                },
               ],
             },
           ]),
@@ -68,13 +94,30 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
       />
       {/* Breadcrumb */}
       <div style={{ marginBottom: ".875rem" }}>
-        <Link href="/" style={{ color: "#3ea8ff", fontSize: ".8125rem", textDecoration: "none" }}>
+        <Link
+          href="/"
+          style={{
+            color: "#3ea8ff",
+            fontSize: ".8125rem",
+            textDecoration: "none",
+          }}
+        >
           ホーム
         </Link>
-        <span style={{ color: "#ccc", margin: "0 .4rem", fontSize: ".8125rem" }}>/</span>
+        <span
+          style={{ color: "#ccc", margin: "0 .4rem", fontSize: ".8125rem" }}
+        >
+          /
+        </span>
         <span style={{ color: "#999", fontSize: ".8125rem" }}>解説</span>
-        <span style={{ color: "#ccc", margin: "0 .4rem", fontSize: ".8125rem" }}>/</span>
-        <span style={{ color: "#999", fontSize: ".8125rem" }}>{article.title}</span>
+        <span
+          style={{ color: "#ccc", margin: "0 .4rem", fontSize: ".8125rem" }}
+        >
+          /
+        </span>
+        <span style={{ color: "#999", fontSize: ".8125rem" }}>
+          {article.title}
+        </span>
       </div>
 
       {/* Title */}
@@ -107,7 +150,9 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
         {article.sections.map((section, i) => (
           <section
             key={i}
-            style={{ marginBottom: i < article.sections.length - 1 ? "2rem" : "0" }}
+            style={{
+              marginBottom: i < article.sections.length - 1 ? "2rem" : "0",
+            }}
           >
             {section.heading && (
               <h2
@@ -130,7 +175,8 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
                   color: "#444",
                   fontSize: ".9375rem",
                   lineHeight: "1.8",
-                  marginBottom: j < section.paragraphs.length - 1 ? ".75rem" : "0",
+                  marginBottom:
+                    j < section.paragraphs.length - 1 ? ".75rem" : "0",
                 }}
               >
                 {p}
@@ -164,7 +210,14 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
           >
             参考文献
           </h2>
-          <ol style={{ paddingLeft: "1.25rem", display: "flex", flexDirection: "column", gap: ".375rem" }}>
+          <ol
+            style={{
+              paddingLeft: "1.25rem",
+              display: "flex",
+              flexDirection: "column",
+              gap: ".375rem",
+            }}
+          >
             {article.references.map((ref, i) => (
               <li key={i} style={{ color: "#999", fontSize: ".8125rem" }}>
                 <a
@@ -180,6 +233,27 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
           </ol>
         </div>
       )}
+
+      {/* Practice */}
+      <div
+        style={{
+          ...card,
+          marginBottom: "1.5rem",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: ".625rem",
+        }}
+      >
+        <Link href="/quiz/syllable-count/" style={primaryButton}>
+          音節区切りクイズで練習
+        </Link>
+        <Link href="/quiz/stress/" style={secondaryButton}>
+          アクセントクイズで練習
+        </Link>
+        <Link href="/words/" style={secondaryButton}>
+          単語一覧を見る
+        </Link>
+      </div>
 
       {/* Other Articles */}
       <div>
@@ -201,7 +275,7 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
             .map((a) => (
               <Link
                 key={a.slug}
-                href={`/article/${a.slug}`}
+                href={`/article/${a.slug}/`}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -214,8 +288,12 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
                   boxShadow: "0 1px 2px rgba(0,0,0,.04)",
                 }}
               >
-                <span style={{ color: "#333", fontSize: ".875rem" }}>{a.title}</span>
-                <span style={{ color: "#3ea8ff", fontSize: ".8125rem" }}>→</span>
+                <span style={{ color: "#333", fontSize: ".875rem" }}>
+                  {a.title}
+                </span>
+                <span style={{ color: "#3ea8ff", fontSize: ".8125rem" }}>
+                  →
+                </span>
               </Link>
             ))}
         </div>

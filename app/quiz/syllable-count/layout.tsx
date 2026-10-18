@@ -2,8 +2,9 @@ import type { Metadata } from "next"
 import { BASE_URL, SITE_NAME } from "../../../lib/constants"
 
 const title = "音節区切りクイズ"
-const description = "英単語の音節の区切り位置を当てるクイズ。タップして音節を区切ろう。"
-const url = `${BASE_URL}/quiz/syllable-count`
+const description =
+  "英単語の音節の区切り位置を当てるクイズ。タップして音節を区切ろう。"
+const url = `${BASE_URL}/quiz/syllable-count/`
 
 export const metadata: Metadata = {
   title,

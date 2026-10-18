@@ -24,14 +24,15 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     images: ["/opengraph-image"],
   },
-  alternates: { canonical: BASE_URL },
   robots: { index: true, follow: true },
 }
 
 const navLinks = [
-  { href: "/quiz/syllable-count", label: "音節区切りクイズ" },
-  { href: "/quiz/stress", label: "アクセントクイズ" },
-  { href: "/article", label: "解説" },
+  { href: "/quiz/syllable-count/", label: "区切りクイズ" },
+  { href: "/quiz/stress/", label: "アクセントクイズ" },
+  { href: "/words/", label: "単語一覧" },
+  { href: "/article/", label: "解説" },
+  { href: "/history/", label: "学習履歴" },
 ]
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
@@ -42,11 +43,13 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           style={{
             backgroundColor: "#fff",
             borderBottom: "1px solid #e0e0e0",
-            padding: "0 1.5rem",
-            height: "54px",
+            padding: ".5rem 1rem",
+            minHeight: "54px",
             display: "flex",
+            flexWrap: "wrap",
             alignItems: "center",
             justifyContent: "space-between",
+            columnGap: "1rem",
             position: "sticky",
             top: 0,
             zIndex: 100,
@@ -64,15 +67,25 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           >
             syllabler シルブラ！
           </Link>
-          <nav style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
+          <nav
+            aria-label="メインメニュー"
+            style={{
+              display: "flex",
+              gap: ".25rem 1rem",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 style={{
-                  color: "#666",
+                  color: "#4b5563",
                   fontSize: ".875rem",
                   textDecoration: "none",
+                  padding: ".5rem 0",
+                  display: "inline-block",
                 }}
               >
                 {link.label}
@@ -84,7 +97,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           style={{
             background: "#f5f5f5",
             minHeight: "calc(100dvh - 54px - 48px)",
-            padding: "1.5rem",
+            padding: "1.5rem 1rem",
           }}
         >
           {children}
@@ -101,7 +114,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             color: "#999",
           }}
         >
-          <p>© syllabler シルブラ！</p>
+          <p style={{ color: "#6b7280" }}>© syllabler シルブラ！</p>
         </footer>
       </body>
     </html>
